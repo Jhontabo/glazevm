@@ -249,6 +249,10 @@ keybindings:
   - commands: ['shell-exec wt']
     bindings: ['alt+enter']
 
+  # Launch File Explorer.
+  - commands: ['shell-exec explorer']
+    bindings: ['alt+e']
+
   # Launch browser.
   - commands: ['shell-exec chrome']
     bindings: ['alt+b']
