@@ -1,63 +1,68 @@
-# GlazeWM + Zebar Configuration
+﻿# GlazeWM + Zebar Configuration | Configuracion GlazeWM + Zebar
 
-Configuracion personal de escritorio para Windows usando [GlazeWM](https://github.com/glzr-io/glazewm) y Zebar.
+Personal Windows desktop setup with GlazeWM and Zebar.  
+Configuracion personal de escritorio en Windows con GlazeWM y Zebar.
 
-## Vista general
+Official GlazeWM repository (repo oficial):  
+https://github.com/glzr-io/glazewm
 
-- Barra superior con workspaces `1-10`, media, stats del sistema y systray.
-- Navegacion y movimiento de ventanas estilo Vim (`Alt+H/J/K/L`).
-- Atajos para terminal, explorador y navegador.
-- Workspaces con cambio rapido y mover ventanas entre espacios.
+## Installation First | Instalacion Primero
 
-## Capturas del escritorio
+### EN
+1. Install GlazeWM from the official repository: https://github.com/glzr-io/glazewm
+2. Copy `glazewm/config.yaml` to `%APPDATA%\glazewm\config.yaml`.
+3. Copy your Zebar config (for your preferred layout/widgets).
+4. Restart GlazeWM.
 
-### 1) Escritorio limpio
+### ES
+1. Instala GlazeWM desde el repo oficial: https://github.com/glzr-io/glazewm
+2. Copia `glazewm/config.yaml` en `%APPDATA%\glazewm\config.yaml`.
+3. Copia tu configuracion de Zebar (segun tu layout/widgets).
+4. Reinicia GlazeWM.
+
+## Screenshots | Pantallazos
+
+### 1) Clean desktop | Escritorio limpio
 ![Escritorio limpio](doc/GlazeVM/1.png)
 
-### 2) Tiling con multiples terminales
+### 2) Multi-terminal tiling | Tiling con multiples terminales
 ![Tiling con terminales](doc/GlazeVM/2.png)
 
-### 3) Launcher / busqueda rapida
+### 3) App launcher / quick search | Launcher / busqueda rapida
 ![Launcher y busqueda](doc/GlazeVM/3.png)
 
-### 4) Flujo de desarrollo en terminal
+### 4) Terminal development flow | Flujo de desarrollo en terminal
 ![Desarrollo en terminal](doc/GlazeVM/4.png)
 
-### 5) Neovim + panel de trabajo
+### 5) Neovim + work panel | Neovim + panel de trabajo
 ![Neovim y panel](doc/GlazeVM/5.png)
 
-## Atajos principales
+## Keybindings | Atajos principales
 
-| Accion | Atajo |
+| EN / ES Action | Binding |
 |--------|-------|
-| Abrir Windows Terminal | `Alt+Enter` |
-| Abrir File Explorer | `Alt+E` |
-| Abrir Chrome | `Alt+B` |
-| Cambiar foco (izq/abajo/arriba/der) | `Alt+H/J/K/L` |
-| Mover ventana (izq/abajo/arriba/der) | `Alt+Shift+H/J/K/L` |
-| Activar modo resize | `Alt+R` |
+| Open Windows Terminal / Abrir Windows Terminal | `Alt+Enter` |
+| Open File Explorer / Abrir File Explorer | `Alt+E` |
+| Open Chrome / Abrir Chrome | `Alt+B` |
+| Focus (left/down/up/right) / Cambiar foco (izq/abajo/arriba/der) | `Alt+H/J/K/L` |
+| Move window (left/down/up/right) / Mover ventana (izq/abajo/arriba/der) | `Alt+Shift+H/J/K/L` |
+| Enable resize mode / Activar modo resize | `Alt+R` |
 | Toggle floating | `Alt+Shift+Space` |
 | Toggle fullscreen | `Alt+F` |
-| Cambiar workspace | `Alt+1` a `Alt+0` |
-| Mover ventana a workspace | `Alt+Shift+1` a `Alt+Shift+0` |
-| Cerrar ventana | `Alt+Q` |
-| Pausar bindings | `Alt+Shift+P` |
-| Recargar config | `Alt+Shift+R` |
+| Switch workspace / Cambiar workspace | `Alt+1` to `Alt+0` |
+| Move window to workspace / Mover ventana a workspace | `Alt+Shift+1` to `Alt+Shift+0` |
+| Close window / Cerrar ventana | `Alt+Q` |
+| Pause bindings / Pausar bindings | `Alt+Shift+P` |
+| Reload config / Recargar config | `Alt+Shift+R` |
 
-## Requisitos
+## Requirements | Requisitos
 
 - Windows 10/11
-- [GlazeWM](https://github.com/glzr-io/glazewm)
+- GlazeWM (official repo / repo oficial): https://github.com/glzr-io/glazewm
 - Zebar
 - Windows Terminal
 - Google Chrome
 
-## Instalacion
+## Documentation | Documentacion
 
-1. Copiar `glazewm/config.yaml` en `%APPDATA%\glazewm\config.yaml`.
-2. Copiar la config de Zebar segun tu widget/layout.
-3. Reiniciar GlazeWM.
-
-## Referencia
-
-- Documentacion de GlazeWM: [Config documentation](https://github.com/glzr-io/glazewm?tab=readme-ov-file#config-documentation)
+- GlazeWM config docs: https://github.com/glzr-io/glazewm?tab=readme-ov-file#config-documentation
