@@ -2,8 +2,13 @@
   "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.1/resources/settings-schema.json",
   "startupConfigs": [
     {
-      "pack": "mushfikurr.overline-zebar",
-      "widget": "main",
+      "pack": "glzr-io.starter",
+      "widget": "with-glazewm",
+      "preset": "default"
+    },
+    {
+      "pack": "sakyasumedh.aurora",
+      "widget": "bar",
       "preset": "default"
     }
   ]
