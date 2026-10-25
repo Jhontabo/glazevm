@@ -246,9 +246,13 @@ keybindings:
   - commands: ['toggle-minimized']
     bindings: ['alt+m']
 
+  # Close focused window (graceful).
+  - commands: ['close']
+    bindings: ['alt+q']
+
   # Force-kill the focused window's process.
   - commands: ['shell-exec --hide-window powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "%USERPROFILE%\.glzr\glazewm\kill-focused-process.ps1"']
-    bindings: ['alt+q']
+    bindings: ['alt+shift+q']
 
   # Kill GlazeWM process safely.
   - commands: ['wm-exit']
