@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -72,16 +73,7 @@ def read_text(path):
     return data.decode("utf-8", errors="replace")
 
 
-def already_tracked(repo_root, rel_path):
-    result = subprocess.run(
-        ["git", "-C", repo_root, "cat-file", "-e", f"origin/main:{rel_path}"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    return result.returncode == 0
-
-
-def validate_glazewm(path, document, errors):
+def validate_glazewm(path, document, errors, repo_root):
     if not isinstance(document, dict):
         errors.append(f"{path}: la raiz del YAML debe ser un mapa")
         return
@@ -143,8 +135,50 @@ def validate_glazewm(path, document, errors):
         if not isinstance(document.get(key), list):
             errors.append(f"{path}: {key} debe ser una lista")
 
+    seen_scripts = set()
+    for keybinding in document.get("keybindings", []):
+        if not isinstance(keybinding, dict):
+            continue
+        for command in keybinding.get("commands", []):
+            if not isinstance(command, str):
+                continue
+            for script_name in re.findall(r"([\w.-]+\.ps1)", command):
+                if script_name in seen_scripts:
+                    continue
+                seen_scripts.add(script_name)
+                script_path = os.path.join(repo_root, "glazewm", script_name)
+                if not os.path.isfile(script_path):
+                    errors.append(
+                        f"{path}: script referenciado no existe: glazewm/{script_name}"
+                    )
 
-def validate_yaml(path, text, errors):
+
+def validate_powershell_syntax(path, rel_path, errors):
+    powershell = shutil.which("powershell") or shutil.which("pwsh")
+    if not powershell:
+        return
+
+    env = os.environ.copy()
+    env["GLAZEWM_VALIDATE_PS1"] = path
+    script = (
+        "$tokens = $null; $errs = $null; "
+        "[System.Management.Automation.Language.Parser]::ParseFile("
+        "$env:GLAZEWM_VALIDATE_PS1, [ref]$tokens, [ref]$errs) | Out-Null; "
+        "if ($errs.Count -gt 0) { "
+        "$errs | ForEach-Object { Write-Output $_.Message }; exit 1 }"
+    )
+    result = subprocess.run(
+        [powershell, "-NoProfile", "-NonInteractive", "-Command", script],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip()
+        errors.append(f"{rel_path}: sintaxis PowerShell invalida: {detail}")
+
+
+def validate_yaml(path, text, errors, repo_root):
     try:
         import yaml
     except ImportError:
@@ -159,7 +193,7 @@ def validate_yaml(path, text, errors):
 
     parts = path.replace("\\", "/").split("/")
     if parts[-1] == "config.yaml" and "glazewm" in parts:
-        validate_glazewm(path, document, errors)
+        validate_glazewm(path, document, errors, repo_root)
 
 
 def validate_json(path, text, errors):
@@ -194,7 +228,6 @@ def main():
             ordered.append(rel_path)
 
     errors = []
-    warnings = []
     checked = 0
 
     for rel_path in ordered:
@@ -210,10 +243,7 @@ def main():
             continue
 
         if extension == ".log":
-            if already_tracked(repo_root, rel_path):
-                warnings.append(f"{rel_path}: log ya versionado; se permite")
-            else:
-                errors.append(f"{rel_path}: no se permiten archivos .log nuevos")
+            errors.append(f"{rel_path}: no se permiten archivos .log")
             continue
 
         if extension in BINARY_EXTENSIONS:
@@ -233,23 +263,22 @@ def main():
                 errors.append(f"{rel_path}: posible secreto detectado ({label})")
 
         if extension in (".yaml", ".yml"):
-            validate_yaml(rel_path, text, errors)
+            validate_yaml(rel_path, text, errors, repo_root)
         elif extension == ".json":
             validate_json(rel_path, text, errors)
-
-    for message in warnings:
-        print(f"ADVERTENCIA: {message}", file=sys.stderr)
+        elif extension == ".ps1":
+            validate_powershell_syntax(abs_path, rel_path, errors)
 
     if errors:
         for message in errors:
             print(f"ERROR: {message}", file=sys.stderr)
         print(
-            f"pre-push: validacion fallida ({len(errors)} error(es), {checked} archivo(s) revisado(s))",
+            f"validacion: fallida ({len(errors)} error(es), {checked} archivo(s) revisado(s))",
             file=sys.stderr,
         )
         return 1
 
-    print(f"pre-push: OK ({checked} archivo(s) revisado(s))")
+    print(f"validacion: OK ({checked} archivo(s) revisado(s))")
     return 0
 
 

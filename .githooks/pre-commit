@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+TMP="$(mktemp)"
+trap 'rm -f "$TMP"' EXIT
+
+git diff --cached --name-only --diff-filter=ACMR > "$TMP"
+
+if [ ! -s "$TMP" ]; then
+  exit 0
+fi
+
+if ! python -c 'import yaml' >/dev/null 2>&1; then
+  echo "pre-commit: falta PyYAML. Instala con: python -m pip install pyyaml" >&2
+  exit 1
+fi
+
+exec python "$ROOT/.githooks/validate.py" --repo-root "$ROOT" --files-from "$TMP"
