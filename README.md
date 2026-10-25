@@ -10,15 +10,17 @@ https://github.com/glzr-io/glazewm
 
 ### EN
 1. Install GlazeWM from the official repository: https://github.com/glzr-io/glazewm
-2. Copy `glazewm/config.yaml` to `%APPDATA%\glazewm\config.yaml`.
-3. Copy your Zebar config (for your preferred layout/widgets).
-4. Restart GlazeWM.
+2. Copy `glazewm/config.yaml` to `%USERPROFILE%\.glzr\glazewm\config.yaml`.
+3. Copy `glazewm/kill-focused-process.ps1` to `%USERPROFILE%\.glzr\glazewm\` (used by `Alt+Q`).
+4. Copy your Zebar config (for your preferred layout/widgets).
+5. Restart GlazeWM.
 
 ### ES
 1. Instala GlazeWM desde el repo oficial: https://github.com/glzr-io/glazewm
-2. Copia `glazewm/config.yaml` en `%APPDATA%\glazewm\config.yaml`.
-3. Copia tu configuracion de Zebar (segun tu layout/widgets).
-4. Reinicia GlazeWM.
+2. Copia `glazewm/config.yaml` en `%USERPROFILE%\.glzr\glazewm\config.yaml`.
+3. Copia `glazewm/kill-focused-process.ps1` en `%USERPROFILE%\.glzr\glazewm\` (lo usa `Alt+Q`).
+4. Copia tu configuracion de Zebar (segun tu layout/widgets).
+5. Reinicia GlazeWM.
 
 ## Screenshots | Pantallazos
 
@@ -51,7 +53,7 @@ https://github.com/glzr-io/glazewm
 | Toggle fullscreen | `Alt+F` |
 | Switch workspace / Cambiar workspace | `Alt+1` to `Alt+0` |
 | Move window to workspace / Mover ventana a workspace | `Alt+Shift+1` to `Alt+Shift+0` |
-| Close window / Cerrar ventana | `Alt+Q` |
+| Force-kill focused process / Matar proceso enfocado | `Alt+Q` |
 | Pause bindings / Pausar bindings | `Alt+Shift+P` |
 | Reload config / Recargar config | `Alt+Shift+R` |
 
