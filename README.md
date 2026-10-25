@@ -11,16 +11,20 @@ https://github.com/glzr-io/glazewm
 ### EN
 1. Install GlazeWM from the official repository: https://github.com/glzr-io/glazewm
 2. Copy `glazewm/config.yaml` to `%USERPROFILE%\.glzr\glazewm\config.yaml`.
-3. Copy `glazewm/kill-focused-process.ps1` to `%USERPROFILE%\.glzr\glazewm\` (used by `Alt+Q`).
-4. Copy your Zebar config (for your preferred layout/widgets).
-5. Restart GlazeWM.
+3. Copy `glazewm/kill-focused-process.ps1` to `%USERPROFILE%\.glzr\glazewm\` (used by `Alt+Shift+Q`).
+4. Restart GlazeWM.
 
 ### ES
 1. Instala GlazeWM desde el repo oficial: https://github.com/glzr-io/glazewm
 2. Copia `glazewm/config.yaml` en `%USERPROFILE%\.glzr\glazewm\config.yaml`.
-3. Copia `glazewm/kill-focused-process.ps1` en `%USERPROFILE%\.glzr\glazewm\` (lo usa `Alt+Q`).
-4. Copia tu configuracion de Zebar (segun tu layout/widgets).
-5. Reinicia GlazeWM.
+3. Copia `glazewm/kill-focused-process.ps1` en `%USERPROFILE%\.glzr\glazewm\` (lo usa `Alt+Shift+Q`).
+4. Reinicia GlazeWM.
+
+## Zebar
+
+Zebar comes bundled with GlazeWM and starts automatically. Its local settings are not part of this repository, so no manual installation is required.
+
+Zebar viene incluido con GlazeWM y arranca automaticamente. Su configuracion local no forma parte de este repositorio, asi que no requiere instalacion manual.
 
 ## Screenshots | Pantallazos
 
@@ -47,21 +51,31 @@ https://github.com/glzr-io/glazewm
 | Open File Explorer / Abrir File Explorer | `Alt+E` |
 | Open Chrome / Abrir Chrome | `Alt+B` |
 | Focus (left/down/up/right) / Cambiar foco (izq/abajo/arriba/der) | `Alt+H/J/K/L` |
-| Move window (left/down/up/right) / Mover ventana (izq/abajo/arriba/der) | `Alt+Shift+H/J/K/L` |
+| Move window (left/down/up/right) / Mover ventana (izq/abajo/arriba/der) | `Ctrl+Shift+H/J/K/L` |
+| Resize window (left/down/up/right) / Redimensionar ventana (izq/abajo/arriba/der) | `Alt+Shift+H/J/K/L` |
 | Enable resize mode / Activar modo resize | `Alt+R` |
+| Toggle tiling / Alternar tiling | `Alt+T` |
 | Toggle floating | `Alt+Shift+Space` |
 | Toggle fullscreen | `Alt+F` |
+| Minimize window / Minimizar ventana | `Alt+M` |
+| Cycle focus (tiling/floating/fullscreen) / Ciclar foco | `Alt+Space` |
+| Toggle tiling direction / Cambiar direccion de tiling | `Alt+V` |
 | Switch workspace / Cambiar workspace | `Alt+1` to `Alt+0` |
 | Move window to workspace / Mover ventana a workspace | `Alt+Shift+1` to `Alt+Shift+0` |
-| Force-kill focused process / Matar proceso enfocado | `Alt+Q` |
+| Move workspace to monitor / Mover workspace a monitor | `Alt+Shift+A/S/D/F` |
+| Close window (graceful) / Cerrar ventana (suave) | `Alt+Q` |
+| Force-kill focused process / Matar proceso enfocado | `Alt+Shift+Q` |
 | Pause bindings / Pausar bindings | `Alt+Shift+P` |
 | Reload config / Recargar config | `Alt+Shift+R` |
+| Exit GlazeWM / Salir de GlazeWM | `Alt+Shift+E` |
+| Redraw windows / Redibujar ventanas | `Alt+Shift+W` |
+| Screenshot / Captura de pantalla | `PrintScreen` |
 
 ## Requirements | Requisitos
 
 - Windows 10/11
 - GlazeWM (official repo / repo oficial): https://github.com/glzr-io/glazewm
-- Zebar
+- Zebar (bundled with GlazeWM / incluido con GlazeWM)
 - Windows Terminal
 - Google Chrome
 
