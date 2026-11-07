@@ -266,8 +266,8 @@ keybindings:
   - commands: ['wm-redraw']
     bindings: ['alt+shift+w']
 
-  # Launch Windows Terminal.
-  - commands: ['shell-exec wt']
+  # Launch Git Bash.
+  - commands: ['shell-exec C:\PROGRA~1\Git\git-bash.exe']
     bindings: ['alt+enter']
 
   # Launch File Explorer.

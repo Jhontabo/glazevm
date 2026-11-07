@@ -37,7 +37,7 @@ Zebar comes bundled with GlazeWM and starts automatically. Its local settings ar
 
 | Action | Binding |
 |--------|-------|
-| Open Windows Terminal | `Alt+Enter` |
+| Open Git Bash | `Alt+Enter` |
 | Open File Explorer | `Alt+E` |
 | Open Chrome | `Alt+B` |
 | Focus (left/down/up/right) | `Alt+H/J/K/L` |
