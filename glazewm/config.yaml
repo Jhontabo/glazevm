@@ -119,15 +119,25 @@ window_behavior:
 
 workspaces:
   - name: '1'
+    display_name: '🌐'
   - name: '2'
+    display_name: '💻'
   - name: '3'
+    display_name: '✨'
   - name: '4'
+    display_name: '📝'
   - name: '5'
+    display_name: '📁'
   - name: '6'
+    display_name: '🎵'
   - name: '7'
+    display_name: '🎮'
   - name: '8'
+    display_name: '🎨'
   - name: '9'
+    display_name: '📧'
   - name: '10'
+    display_name: '💬'
 
 window_rules:
   - commands: ['set-floating']
@@ -138,6 +148,28 @@ window_rules:
       - window_process: { equals: 'SystemSettings' }
       - window_process: { equals: 'ApplicationFrameHost' }
       - window_title: { regex: '^(Open|Save|Select|Properties|Abrir|Guardar|Propiedades)' }
+
+  - commands: ['move --workspace 5']
+    match:
+      # File Explorer windows go to workspace 5.
+      - window_process: { equals: 'explorer' }
+        window_class: { equals: 'CabinetWClass' }
+
+  - commands: ['move --workspace 1']
+    match:
+      # Chrome browser windows go to workspace 1.
+      - window_process: { equals: 'chrome' }
+        window_class: { equals: 'Chrome_WidgetWin_1' }
+
+  - commands: ['move --workspace 10']
+    match:
+      # WhatsApp goes to workspace 10.
+      - window_process: { regex: '^WhatsApp' }
+
+  - commands: ['move --workspace 3']
+    match:
+      # Claude desktop app goes to workspace 3.
+      - window_process: { equals: 'claude' }
 
   - commands: ['ignore']
     match:
