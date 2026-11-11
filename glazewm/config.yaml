@@ -171,6 +171,12 @@ window_rules:
       # Claude desktop app goes to workspace 3.
       - window_process: { equals: 'claude' }
 
+  - commands: ['move --workspace 9']
+    match:
+      # Notion and Obsidian go to workspace 9.
+      - window_process: { equals: 'Notion' }
+      - window_process: { equals: 'Obsidian' }
+
   - commands: ['ignore']
     match:
       # Ignores any Zebar windows.
