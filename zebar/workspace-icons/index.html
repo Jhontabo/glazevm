@@ -33,6 +33,9 @@
       };
       const FALLBACK_EMOJI = '▫️';
 
+      // Mismos nombres que `workspaces` en glazewm/config.yaml.
+      const WORKSPACE_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
       // Último estado de GlazeWM recibido.
       let latestGlazewm = null;
 
@@ -48,8 +51,16 @@
 
       function render() {
         if (!latestGlazewm) return;
+        // Los 10 workspaces de la configuración, en cada barra. GlazeWM solo
+        // devuelve los activos, así que los que no existen aún se dibujan vacíos.
+        const active = new Map(
+          latestGlazewm.allWorkspaces.map(ws => [ws.name, ws]),
+        );
+        const workspaces = WORKSPACE_NAMES.map(
+          name => active.get(name) ?? { name, children: [], hasFocus: false, isDisplayed: false },
+        );
         document.getElementById('workspaces').replaceChildren(
-          ...latestGlazewm.currentWorkspaces.map(renderWorkspace),
+          ...workspaces.map(renderWorkspace),
         );
       }
 
