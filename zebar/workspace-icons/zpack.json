@@ -2,7 +2,7 @@
   "$schema": "https://github.com/glzr-io/zebar/raw/v3.1.1/resources/zpack-schema.json",
   "name": "workspace-icons",
   "version": "0.1.0",
-  "description": "Workspace bar for GlazeWM that shows the real icon of each app open in a workspace.",
+  "description": "Workspace bar for GlazeWM that shows an emoji for each app open in a workspace.",
   "tags": ["topbar", "glazewm"],
   "repositoryUrl": "",
   "widgets": [
@@ -20,12 +20,7 @@
         "rules": []
       },
       "privileges": {
-        "shellCommands": [
-          {
-            "program": "powershell",
-            "argsRegex": "^-NoProfile -NonInteractive -EncodedCommand [A-Za-z0-9+/=]+$"
-          }
-        ]
+        "shellCommands": []
       },
       "presets": [
         {

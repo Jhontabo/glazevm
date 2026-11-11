@@ -8,24 +8,6 @@
   <body>
     <div id="workspaces"></div>
 
-    <!-- PowerShell que devuelve el icono (PNG en base64) del ejecutable de un proceso.
-         El nombre del proceso llega por la variable de entorno ZBAR_PROC. -->
-    <template id="icon-script">
-$ProgressPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-$name = $env:ZBAR_PROC
-if ($name -notmatch '^[A-Za-z0-9_.\-]+$') { exit 2 }
-$proc = Get-Process -Name $name | Where-Object { try { $_.Path } catch { $null } } | Select-Object -First 1
-if (-not $proc) { exit 1 }
-Add-Type -AssemblyName System.Drawing
-$icon = [System.Drawing.Icon]::ExtractAssociatedIcon($proc.Path)
-if (-not $icon) { exit 1 }
-$bitmap = $icon.ToBitmap()
-$stream = New-Object System.IO.MemoryStream
-$bitmap.Save($stream, [System.Drawing.Imaging.ImageFormat]::Png)
-[Console]::Out.Write([Convert]::ToBase64String($stream.ToArray()))
-    </template>
-
     <script type="module">
       import * as zebar from 'https://esm.sh/zebar@3.3.1';
 
@@ -33,47 +15,29 @@ $bitmap.Save($stream, [System.Drawing.Imaging.ImageFormat]::Png)
         glazewm: { type: 'glazewm' },
       });
 
-      // Icono ya pedido por proceso: data URL, o null si no se pudo obtener.
-      const iconCache = new Map();
-      const iconsRequested = new Set();
+      // Emoji por proceso (nombre de GlazeWM, sin distinguir mayúsculas).
+      const APP_EMOJI = {
+        chrome: '🌐',
+        claude: '✨',
+        winword: '📝',
+        excel: '📊',
+        powerpnt: '📑',
+        explorer: '📁',
+        notion: '📓',
+        obsidian: '🧠',
+        whatsapp: '💬',
+        spotify: '🎵',
+        discord: '🎮',
+        figma: '🎨',
+        mintty: '🐧',
+      };
+      const FALLBACK_EMOJI = '▫️';
 
-      // Codifica el script en UTF-16LE base64, que es lo que espera -EncodedCommand.
-      function encodeCommand(script) {
-        const bytes = new Uint8Array(script.length * 2);
-        for (let i = 0; i < script.length; i++) {
-          const code = script.charCodeAt(i);
-          bytes[i * 2] = code & 0xff;
-          bytes[i * 2 + 1] = code >> 8;
-        }
-        let binary = '';
-        bytes.forEach(byte => (binary += String.fromCharCode(byte)));
-        return btoa(binary);
-      }
+      // Último estado de GlazeWM recibido.
+      let latestGlazewm = null;
 
-      const encodedScript = encodeCommand(
-        document.getElementById('icon-script').textContent.trim(),
-      );
-
-      async function loadIcon(processName, render) {
-        if (iconsRequested.has(processName)) return;
-        iconsRequested.add(processName);
-
-        try {
-          const output = await zebar.shellExec(
-            'powershell',
-            ['-NoProfile', '-NonInteractive', '-EncodedCommand', encodedScript],
-            { env: { ZBAR_PROC: processName } },
-          );
-          const base64 = output.stdout.trim();
-          iconCache.set(
-            processName,
-            output.code === 0 && base64 ? `data:image/png;base64,${base64}` : null,
-          );
-        } catch (error) {
-          iconCache.set(processName, null);
-        }
-
-        render();
+      function emojiFor(processName) {
+        return APP_EMOJI[processName.toLowerCase()] ?? FALLBACK_EMOJI;
       }
 
       // Todas las ventanas de un workspace, aunque estén dentro de contenedores.
@@ -82,26 +46,20 @@ $bitmap.Save($stream, [System.Drawing.Imaging.ImageFormat]::Png)
         return (node.children ?? []).flatMap(windowsOf);
       }
 
-      // Último estado de GlazeWM recibido, para volver a dibujar al cargar iconos.
-      let latestGlazewm = null;
-
       function render() {
         if (!latestGlazewm) return;
-        const root = document.getElementById('workspaces');
-        root.replaceChildren(
-          ...latestGlazewm.currentWorkspaces.map(workspace =>
-            renderWorkspace(workspace, latestGlazewm),
-          ),
+        document.getElementById('workspaces').replaceChildren(
+          ...latestGlazewm.currentWorkspaces.map(renderWorkspace),
         );
       }
 
-      function renderWorkspace(workspace, glazewm) {
+      function renderWorkspace(workspace) {
         const button = document.createElement('button');
         button.className = 'workspace';
         if (workspace.hasFocus) button.classList.add('focused');
         if (workspace.isDisplayed) button.classList.add('displayed');
         button.addEventListener('click', () =>
-          glazewm.runCommand(`focus --workspace ${workspace.name}`),
+          latestGlazewm.runCommand(`focus --workspace ${workspace.name}`),
         );
 
         const number = document.createElement('span');
@@ -110,32 +68,16 @@ $bitmap.Save($stream, [System.Drawing.Imaging.ImageFormat]::Png)
         button.append(number);
 
         // Una entrada por proceso, aunque haya varias ventanas del mismo.
-        const windows = windowsOf(workspace);
         const seen = new Set();
-        for (const window of windows) {
+        for (const window of windowsOf(workspace)) {
           if (seen.has(window.processName)) continue;
           seen.add(window.processName);
 
-          const appIcon = document.createElement('span');
-          appIcon.className = 'app';
-          appIcon.title = window.title;
-
-          if (iconCache.has(window.processName)) {
-            const dataUrl = iconCache.get(window.processName);
-            if (dataUrl) {
-              const img = document.createElement('img');
-              img.src = dataUrl;
-              img.alt = window.processName;
-              appIcon.append(img);
-            } else {
-              appIcon.textContent = window.processName.slice(0, 1).toUpperCase();
-            }
-          } else {
-            appIcon.textContent = window.processName.slice(0, 1).toUpperCase();
-            loadIcon(window.processName, render);
-          }
-
-          button.append(appIcon);
+          const app = document.createElement('span');
+          app.className = 'app';
+          app.textContent = emojiFor(window.processName);
+          app.title = window.title;
+          button.append(app);
         }
 
         return button;
