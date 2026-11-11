@@ -149,33 +149,10 @@ window_rules:
       - window_process: { equals: 'ApplicationFrameHost' }
       - window_title: { regex: '^(Open|Save|Select|Properties|Abrir|Guardar|Propiedades)' }
 
-  - commands: ['move --workspace 5']
-    match:
-      # File Explorer windows go to workspace 5.
-      - window_process: { equals: 'explorer' }
-        window_class: { equals: 'CabinetWClass' }
-
-  - commands: ['move --workspace 1']
-    match:
-      # Chrome browser windows go to workspace 1.
-      - window_process: { equals: 'chrome' }
-        window_class: { equals: 'Chrome_WidgetWin_1' }
-
   - commands: ['move --workspace 10']
     match:
       # WhatsApp goes to workspace 10.
       - window_process: { regex: '^WhatsApp' }
-
-  - commands: ['move --workspace 3']
-    match:
-      # Claude desktop app goes to workspace 3.
-      - window_process: { equals: 'claude' }
-
-  - commands: ['move --workspace 9']
-    match:
-      # Notion and Obsidian go to workspace 9.
-      - window_process: { equals: 'Notion' }
-      - window_process: { equals: 'Obsidian' }
 
   - commands: ['ignore']
     match:
