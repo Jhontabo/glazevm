@@ -16,6 +16,10 @@ https://github.com/glzr-io/glazewm
 
 Zebar comes bundled with GlazeWM and starts automatically. Its local settings are not part of this repository, so no manual installation is required.
 
+### Workspace icons (`zebar/workspace-icons`)
+
+A Zebar widget pack that shows, for each GlazeWM workspace, the real icon of every app open in it. It reads the workspace state from GlazeWM and extracts each app's icon from its `.exe` with PowerShell. It only allows that one PowerShell command, declared in `zpack.json`.
+
 ## Screenshots
 
 ### 1) Clean desktop

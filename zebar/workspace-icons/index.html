@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+  </head>
+  <body>
+    <div id="workspaces"></div>
+
+    <script type="module">
+      import * as zebar from 'https://esm.sh/zebar@3.3.1';
+
+      const providers = zebar.createProviderGroup({
+        glazewm: { type: 'glazewm' },
+      });
+
+      // Emoji por proceso (nombre de GlazeWM, sin distinguir mayúsculas).
+      const APP_EMOJI = {
+        chrome: '🌐',
+        claude: '✨',
+        winword: '📝',
+        excel: '📊',
+        powerpnt: '📑',
+        explorer: '📁',
+        notion: '📓',
+        obsidian: '🧠',
+        whatsapp: '💬',
+        spotify: '🎵',
+        discord: '🎮',
+        figma: '🎨',
+        mintty: '🐧',
+      };
+      const FALLBACK_EMOJI = '▫️';
+
+      // Mismos nombres que `workspaces` en glazewm/config.yaml.
+      const WORKSPACE_NAMES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+      // Último estado de GlazeWM recibido.
+      let latestGlazewm = null;
+
+      function emojiFor(processName) {
+        return APP_EMOJI[processName.toLowerCase()] ?? FALLBACK_EMOJI;
+      }
+
+      // Todas las ventanas de un workspace, aunque estén dentro de contenedores.
+      function windowsOf(node) {
+        if (node.type === 'window') return [node];
+        return (node.children ?? []).flatMap(windowsOf);
+      }
+
+      function render() {
+        if (!latestGlazewm) return;
+        // Los 10 workspaces de la configuración, en cada barra. GlazeWM solo
+        // devuelve los activos, así que los que no existen aún se dibujan vacíos.
+        const active = new Map(
+          latestGlazewm.allWorkspaces.map(ws => [ws.name, ws]),
+        );
+        const workspaces = WORKSPACE_NAMES.map(
+          name => active.get(name) ?? { name, children: [], hasFocus: false, isDisplayed: false },
+        );
+        document.getElementById('workspaces').replaceChildren(
+          ...workspaces.map(renderWorkspace),
+        );
+      }
+
+      function renderWorkspace(workspace) {
+        const button = document.createElement('button');
+        button.className = 'workspace';
+        if (workspace.hasFocus) button.classList.add('focused');
+        if (workspace.isDisplayed) button.classList.add('displayed');
+        button.addEventListener('click', () =>
+          latestGlazewm.runCommand(`focus --workspace ${workspace.name}`),
+        );
+
+        const number = document.createElement('span');
+        number.className = 'number';
+        number.textContent = workspace.name;
+        button.append(number);
+
+        // Una entrada por proceso, aunque haya varias ventanas del mismo.
+        const seen = new Set();
+        for (const window of windowsOf(workspace)) {
+          if (seen.has(window.processName)) continue;
+          seen.add(window.processName);
+
+          const app = document.createElement('span');
+          app.className = 'app';
+          app.textContent = emojiFor(window.processName);
+          app.title = window.title;
+          button.append(app);
+        }
+
+        return button;
+      }
+
+      providers.onOutput(() => {
+        latestGlazewm = providers.outputMap.glazewm ?? null;
+        render();
+      });
+    </script>
+  </body>
+</html>
